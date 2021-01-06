@@ -93,7 +93,7 @@ class TableConnection(BaseTableConnection):
             self.connection.client.get_waiter('table_exists').wait(
                 TableName=self.table_name,
                 WaiterConfig={
-                    'Delay': 4,
+                    'Delay': 10,
                     'MaxAttempts': self.connection._max_retry_attempts_exception
                 }
             )
@@ -112,7 +112,7 @@ class TableConnection(BaseTableConnection):
             self.connection.client.get_waiter('table_not_exists').wait(
                 TableName=self.table_name,
                 WaiterConfig={
-                    'Delay': 4,
+                    'Delay': 10,
                     'MaxAttempts': self.connection._max_retry_attempts_exception
                 }
             )
@@ -137,4 +137,4 @@ class TableConnection(BaseTableConnection):
             except ClientError:
                 if i == self.connection._max_retry_attempts_exception:
                     raise
-                time.sleep(4)
+                time.sleep(10)

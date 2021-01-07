@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pydjamodb',
-    version='0.0.3',
+    version='0.0.4',
     description="Django interface to PyDjamoDB.",
     keywords='django, DynamoDB, PyDjamoDB',
     author='Lubos Matl',

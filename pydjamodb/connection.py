@@ -99,7 +99,7 @@ class TableConnection(BaseTableConnection):
             )
 
         if set_point_in_time_recovery:
-            set_point_in_time_recovery(enabled=True)
+            self.set_point_in_time_recovery(enabled=True)
 
         return result
 
@@ -134,6 +134,7 @@ class TableConnection(BaseTableConnection):
                         'PointInTimeRecoveryEnabled': enabled
                     }
                 )
+                break
             except ClientError:
                 if i == self.connection._max_retry_attempts_exception:
                     raise

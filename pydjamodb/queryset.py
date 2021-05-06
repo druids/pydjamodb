@@ -235,6 +235,11 @@ class DynamoDBQuerySet:
                 self._filter,
             )
 
+    def delete(self):
+        with self._model.batch_write() as batch:
+            for obj in self:
+                batch.delete(obj)
+
     def as_manager(cls):
         return DynamoDBManager.from_queryset(cls)()
     as_manager.queryset_only = True

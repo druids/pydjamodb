@@ -121,3 +121,10 @@ class PyDjamoDBTestCase(DynamoDBTestMixin, TestCase):
             qs.get(number=10)
 
         assert_equal(qs.get(number=9), instances[-1])
+
+    def test_queryset_delete_should_delete_items(self):
+        self.create_test_dynamo_model_instances(id='test')
+        self.create_test_dynamo_model_instances(id='another test', count=5)
+        TestDynamoModel.objects.set_hash_key('test').delete()
+        assert_equal(TestDynamoModel.objects.set_hash_key('test').count(), 0)
+        assert_equal(TestDynamoModel.objects.set_hash_key('another test').count(), 5)

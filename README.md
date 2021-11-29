@@ -3,6 +3,8 @@ Prolog
 
 `pydjamodb` library is Django connector to the AWS DynamoDB. As a base is used `PynamoDB` library which models is transformed into `Django` model structure with the querysets and managers.
 
+[![Coverage Status](https://coveralls.io/repos/github/druids/pydjamodb/badge.svg?branch=master)](https://coveralls.io/github/druids/pydjamodb?branch=master)
+
 Installation
 ------------
 

@@ -205,6 +205,8 @@ class DynamoDBQuerySet:
 
         obj._pre_filter(field, field_name, operator, value)
         obj._filter = obj._get_filter(field, operator, value)
+        if operator == 'between' and value[0] > value[1]:
+            return self.none()
         return obj
 
     def get(self, **kwargs):

@@ -99,6 +99,7 @@ class PyDjamoDBTestCase(DynamoDBTestMixin, TestCase):
         qs = TestDynamoModel.objects_string_number.set_hash_key('test')
         assert_equal(list(qs.filter(number=5)), [instances[5]])
         assert_equal(list(qs.filter(number__between=(2, 4))), instances[2:5])
+        assert_equal(list(qs.filter(number__between=(4, 2))), [])
         assert_equal(list(qs.filter(number__gt=4)), instances[5:])
         assert_equal(list(qs.filter(number__lte=4)), instances[:5])
 

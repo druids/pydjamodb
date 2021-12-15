@@ -27,7 +27,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     install_requires=[
-        'django>=2.0',
+        'django>=2.0, <4.0',
     ],
     zip_safe=False
 )

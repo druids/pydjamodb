@@ -2,9 +2,9 @@ import random
 
 import string
 
-from django.test import TestCase
 from django.utils.timezone import now
 
+from germanium.test_cases.default import GermaniumTestCase
 from germanium.tools import assert_equal, assert_raises, assert_true, assert_false
 
 from uuid import uuid4
@@ -12,10 +12,9 @@ from uuid import uuid4
 from test_app.models import TestDynamoModel
 
 from pydjamodb.queryset import DynamoDBQuerySetError, MultipleObjectsReturned, ObjectDoesNotExist
-from pydjamodb.tests import DynamoDBTestMixin
 
 
-class PyDjamoDBTestCase(DynamoDBTestMixin, TestCase):
+class PyDjamoDBTestCase(GermaniumTestCase):
 
     def create_test_dynamo_model(self, **kwargs):
         default_data = dict(

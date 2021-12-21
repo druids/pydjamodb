@@ -4,17 +4,24 @@ import sys
 from django.db import connections
 from django.test.runner import ParallelTestSuite, DiscoverRunner
 
+from .connection import TestTableConnection
 from .models import dynamodb_model_classes
+
+try:
+    from germanium.signals import set_up, tear_down
+
+    def set_dynamodb_test_autoclean():
+        set_up.connect(clean_dynamodb_database)
+        tear_down.connect(clean_dynamodb_database)
+except ImportError:
+    def set_dynamodb_test_autoclean():
+        pass
 
 
 def init_pynamodb_test_prefix(prefix=None):
     for model_class in dynamodb_model_classes:
         model_class._connection = None
-        connection = model_class._get_connection()
-        if prefix:
-            connection.table_name = 'test_{}_{}'.format(prefix, connection.table_name)
-        else:
-            connection.table_name = 'test_{}'.format(connection.table_name)
+        model_class._connection = TestTableConnection(model_class._get_connection(), prefix)
 
 
 def remove_pynamodb_table(model_class):
@@ -55,6 +62,11 @@ class DynamoDBParallelTestSuite(ParallelTestSuite):
     init_worker = _init_worker
 
 
+def clean_dynamodb_database(sender, **kwargs):
+    for model_class in dynamodb_model_classes:
+        model_class._connection.post_test_clean(model_class)
+
+
 class DynamoDBTestSuiteMixin:
 
     parallel_test_suite = DynamoDBParallelTestSuite
@@ -82,6 +94,7 @@ class DynamoDBTestSuiteMixin:
 
     def _setup_pynamodb_database(self, prefix=None):
         init_pynamodb_test_prefix(prefix)
+        set_dynamodb_test_autoclean()
         table_names = []
         for model_class in dynamodb_model_classes:
             table_names.append(model_class._connection.table_name)

@@ -71,6 +71,8 @@ class TableConnection(BaseTableConnection):
             settings.PYDJAMODB_DATABASE.get('POINT_IN_TIME_RECOVERY', False) if set_point_in_time_recovery is None
             else set_point_in_time_recovery
         )
+        if not stream_specification:
+            stream_specification = settings.PYDJAMODB_DATABASE.get('STREAM_SPECIFICATION')
 
         if tags is None and 'TAGS' in settings.PYDJAMODB_DATABASE:
             tags = {

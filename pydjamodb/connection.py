@@ -139,3 +139,36 @@ class TableConnection(BaseTableConnection):
                 if i == self.connection._max_retry_attempts_exception:
                     raise
                 time.sleep(10)
+
+
+class TestTableConnection:
+
+    def __init__(self, wrapped_connection, prefix=None):
+        self._wrapped_connection = wrapped_connection
+        self._is_test_clean_required = False
+        if prefix:
+            self._wrapped_connection.table_name = 'test_{}_{}'.format(prefix, self._wrapped_connection.table_name)
+        else:
+            self._wrapped_connection.table_name = 'test_{}'.format(self._wrapped_connection.table_name)
+
+    def __getattr__(self, attr):
+        return getattr(self._wrapped_connection, attr)
+
+    def update_item(self, *args, **kwargs):
+        self._is_test_clean_required = True
+        return self._wrapped_connection.update_item(*args, **kwargs)
+
+    def put_item(self, *args, **kwargs):
+        self._is_test_clean_required = True
+        return self._wrapped_connection.put_item(*args, **kwargs)
+
+    def batch_write_item(self, *args, **kwargs):
+        self._is_test_clean_required = True
+        return self._wrapped_connection.batch_write_item(*args, **kwargs)
+
+    def post_test_clean(self, model_class):
+        if self._is_test_clean_required:
+            with model_class.batch_write() as batch:
+                for item in model_class.scan():
+                    batch.delete(item)
+        self._is_test_clean_required = False

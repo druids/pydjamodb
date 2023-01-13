@@ -179,9 +179,9 @@ class DynamoDBQuerySet:
         elif operator == 'in':
             return field.is_in(value)
         elif operator == 'exists' and value:
-            return field.exists(value)
+            return field.exists()
         elif operator == 'exists' and not value:
-            return field.does_not_exist(value)
+            return field.does_not_exist()
         elif operator == 'startswith':
             return field.startswith(value)
         elif operator == 'contains':

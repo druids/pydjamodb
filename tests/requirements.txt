@@ -1,5 +1,5 @@
 django>=2.0, <4.0
-https://github.com/druids/pynamodb/tarball/AddTagsSupport#egg=pynamodb
-https://github.com/druids/germanium/tarball/AddedSignals
+pynamodb==5.3.4
+django-germanium==2.3.6
 flake8
 coveralls
